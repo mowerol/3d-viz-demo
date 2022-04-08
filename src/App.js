@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
-
-function App() {
+import React, { Suspense, useRef } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, Center } from "@react-three/drei";
+import Model from "./components/Model";
+import { Bounds } from "./components/Bounds.tsx";
+export default function Viewer() {
+  const ref = useRef();
+  console.log(OrbitControls);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Canvas camera={{ position: [-40, 80, 180], fov: 50 }} shadows>
+      <Suspense fallback={null}>
+        <ambientLight />
+        <pointLight position={[10, 10, 10]} />
+        <Bounds
+          position={[200, 5, 10]}
+          fit
+          clip
+          observe
+          damping={6}
+          margin={1.2}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Center>
+            <Model />
+          </Center>
+        </Bounds>
+      </Suspense>
+      <OrbitControls maxPolarAngle={1} minPolarAngle={1} ref={ref} autoRotate />
+    </Canvas>
   );
 }
-
-export default App;
